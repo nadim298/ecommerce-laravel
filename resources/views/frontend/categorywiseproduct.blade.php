@@ -12,10 +12,10 @@
 		</a>
 	</li>
 	<li>
-		<span>{{$category_name=App\Category::find($category_id)->category_name}}</span>
+		<span>{{$category_details->name}}</span>
 	</li>
 </ul>
-<h1 class="main-ttl"><span>{{$category_name}}</span></h1>
+<h1 class="main-ttl"><span>{{$category_details->name}}</span></h1>
 <!-- Catalog Sidebar - start -->
 <div class="section-sb">
 	<!-- Filter - start -->
@@ -529,7 +529,7 @@
           @forelse ($products as $product)
             <div class="prodlist-i">
                   <a class="list-img-carousel prodlist-i-img" href="{{url('product/details')}}/{{$product->id}}">
-                    <img src="{{asset('uploads/product_photos')}}/{{$product->product_image}}" alt="Adipisci aperiam commodi">
+                    <img src="{{asset('uploads/product_photos')}}/{{$product->image}}" alt="Adipisci aperiam commodi">
                   </a>
                   <div class="prodlist-i-cont">
                       <h3><a href="{{url('product/details')}}/{{$product->id}}">{{$product->product_name}}</a></h3>
@@ -539,11 +539,11 @@
                           <a class="prodlist-i-compare" href="#"><i class="fa fa-bar-chart"></i> Compare</a>
                       </p>
                                               <div class="prodlist-i-txt">
-                                                {{$product->product_description}}
+                                                {{$product->description}}
                                             </div>
                                           <div class="prodlist-i-action">
                           <span class="prodlist-i-price">
-                              <b>{{$product->product_price}}</b>
+                              <b>{{$product->price}}</b>
                                                       </span>
                           <p class="prodlist-i-qnt">
                               <input value="1" type="text">

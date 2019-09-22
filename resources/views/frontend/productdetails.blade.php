@@ -20,52 +20,41 @@
 	<div class="prod-slider-wrap">
 		<div class="prod-slider">
 			<ul class="prod-slider-car">
-									<li>
+					{{-- <li>
 						<a data-fancybox-group="product" class="fancy-img" href="img/product/1.jpg">
-							<img src="{{asset('uploads/product_photos/')}}/{{$singleProductInfo->product_image}}" alt="">
+							<img src="{{asset('uploads/product_photos/')}}/{{$singleProductInfo->image}}" alt="">
+						</a>
+					</li> --}}
+          <li>
+						<a data-fancybox-group="product" class="fancy-img" href="">
+							<img src="{{asset('uploads/product_photos/')}}/{{$singleProductInfo->image}}" alt="">
 						</a>
 					</li>
+          @foreach ($singleProductInfo->relationtoimages as $image)
+            <li>
+  						<a data-fancybox-group="product" class="fancy-img" href="">
+  							<img src="{{asset('uploads/product_photos/')}}/{{$image->image}}" alt="">
+  						</a>
+  					</li>
+          @endforeach
 
-									<li>
-						<a data-fancybox-group="product" class="fancy-img" href="img/product/6.jpg">
-							<img src="{{asset('frontend_assets/img/product/6.jpg')}}" alt="">
-						</a>
-					</li>
-									<li>
-						<a data-fancybox-group="product" class="fancy-img" href="img/product/7.jpg">
-							<img src="{{asset('frontend_assets/img/product/7.jpg')}}" alt="">
-						</a>
-					</li>
-									<li>
-						<a data-fancybox-group="product" class="fancy-img" href="img/product/8.jpg">
-							<img src="{{asset('frontend_assets/img/product/8.jpg')}}" alt="">
-						</a>
-					</li>
-							</ul>
+			</ul>
 		</div>
 		<div class="prod-thumbs">
 			<ul class="prod-thumbs-car">
-									<li>
-						<a data-slide-index="0" href="#">
-							<img src="{{asset('frontend_assets/img/product/1.jpg')}}" alt="">
-						</a>
-					</li>
+                  <li>
+            <a data-slide-index="0" href="#">
+              <img src="{{asset('uploads/product_photos/')}}/{{$singleProductInfo->image}}" alt="">
+            </a>
+          </li>
+          @foreach ($singleProductInfo->relationtoimages as $image)
+            <li>
+            						<a data-slide-index="{{$loop->index+1}}" href="#">
+            							<img src="{{asset('uploads/product_photos/')}}/{{$image->image}}" alt="Product Image">
+            						</a>
+            					</li>
+          @endforeach
 
-									<li>
-						<a data-slide-index="5" href="#">
-							<img src="{{asset('frontend_assets/img/product/6.jpg')}}" alt="">
-						</a>
-					</li>
-									<li>
-						<a data-slide-index="6" href="#">
-							<img src="{{asset('frontend_assets/img/product/7.jpg')}}" alt="">
-						</a>
-					</li>
-									<li>
-						<a data-slide-index="7" href="#">
-							<img src="{{asset('frontend_assets/img/product/8.jpg')}}" alt="">
-						</a>
-					</li>
 							</ul>
 		</div>
 	</div>
@@ -73,7 +62,7 @@
 	<!-- Product Description/Info -->
 	<div class="prod-cont">
 		<div class="prod-cont-txt">
-      {{$singleProductInfo->product_description}}
+      {{$singleProductInfo->description}}
 			</div>
 		<p class="prod-actions">
 			<a href="#" class="prod-favorites"><i class="fa fa-heart"></i> Wishlist</a>
@@ -104,21 +93,18 @@
 			</ul>
 			<p class="prod-skuttl">CLOTHING SIZES</p>
 			<div class="offer-props-select">
-				<p>XL</p>
-				<ul>
-					<li><a href="#">XS</a></li>
-					<li><a href="#">S</a></li>
-					<li><a href="#">M</a></li>
-					<li class="active"><a href="#">XL</a></li>
-					<li><a href="#">L</a></li>
-					<li><a href="#">4XL</a></li>
-					<li><a href="#">XXL</a></li>
-				</ul>
+        <select class="" name="size" id="size">
+          <option value="">Select Size</option>
+          @foreach ($singleProductInfo->relationtoattributes as $sizes)
+            <option value="{{$singleProductInfo->id}}-{{$sizes->size}}">{{$sizes->size}}</option>
+          @endforeach
+        </select>
+
 			</div>
 		</div>
 		<div class="prod-info">
 			<p class="prod-price">
-				<b class="item_current_price">BDT {{$singleProductInfo->product_price}}</b>
+				<b class="item_current_price" >BDT <span id="price">{{$singleProductInfo->price}}</span></b>
 			</p>
 			<p class="prod-qnt">
 				<input value="1" type="text">
@@ -127,10 +113,10 @@
 			</p>
 
 			<p class="prod-addwrap">
-				@if ($singleProductInfo->product_quantity>0)
-          <a href="{{url('add/to/cart')}}/{{$singleProductInfo->id}}" class="prod-add" rel="nofollow">Add to cart</a>
+				@if ($totalstock>0)
+          <button class="prod-add" id="add_cart" href="{{url('add/to/cart')}}/{{$singleProductInfo->id}}"   rel="nofollow">Add to cart</button>
         @else
-          <span style="color:red; margin-left:50px;">Out Of Stock</span>
+          <button class="prod-add" id="add_cart" style="background-color:red;" disabled>Out of stock</button>
         @endif
 			</p>
 		</div>
@@ -139,29 +125,9 @@
 				<b>SKU</b> 05464207
 			</li>
 			<li>
-				<b>Material</b> Nylon
+				<b>Color</b> {{$singleProductInfo->product_color}}
 			</li>
 			<li>
-				<b>Pattern Type</b> Solid
-			</li>
-			<li>
-				<b>Wash</b> Colored
-			</li>
-			<li>
-				<b>Style</b> Sport
-			</li>
-			<li>
-				<b>Color</b> Blue
-			</li>
-			<li>
-				<b>Gender</b> Unisex
-			</li>
-			<li>
-				<b>Rain Cover</b> No
-			</li>
-			<li>
-				<b>Exterior</b> Solid Bag
-			</li>
 			<li><a href="#" class="prod-showprops">All Features</a></li>
 		</ul>
 	</div>
@@ -395,30 +361,33 @@
 	<h2><span>Related products</span></h2>
 	<div class="prod-related-car" id="prod-related-car">
 		<ul class="slides">
-			<li class="prod-rel-wrap">
-				@foreach ($relatedProducts as $relatedProduct)
-          <div class="prod-rel">
-  					<a href="{{url('product/details')}}/{{$relatedProduct->id}}" class="prod-rel-img">
-  						<img src="{{asset('uploads/product_photos')}}/{{$relatedProduct->product_image}}" alt="Adipisci aperiam commodi">
-  					</a>
-  					<div class="prod-rel-cont">
-  						<h3><a href="{{url('product/details')}}/{{$relatedProduct->id}}">{{$relatedProduct->product_name}}</a></h3>
-  						<p class="prod-rel-price">
-  							<b>{{$relatedProduct->product_price}}</b>
-  						</p>
-  						<div class="prod-rel-actions">
-  							<a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
-  							<a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
-  							<p class="prod-i-addwrap">
-  								<a title="Add to cart" href="" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
-  							</p>
-  						</div>
-  					</div>
-  				</div>
-        @endforeach
+      @forelse ($relatedProducts->chunk(3) as $chunk)
+        <li class="prod-rel-wrap">
+          @foreach ($chunk as $relatedProduct)
+            <div class="prod-rel">
+    					<a href="{{url('product/details')}}/{{$relatedProduct->id}}" class="prod-rel-img">
+    						<img src="{{asset('uploads/product_photos/')}}/{{$relatedProduct->image}}" alt="Product Image">
+    					</a>
+    					<div class="prod-rel-cont">
+    						<h3><a href="{{url('product/details')}}/{{$relatedProduct->id}}">{{$relatedProduct->product_name}}</a></h3>
+    						<p class="prod-rel-price">
+    							<b>BDT {{$relatedProduct->price}}</b>
+    						</p>
+    						<div class="prod-rel-actions">
+    							<a title="Wishlist" href="#" class="prod-rel-favorites"><i class="fa fa-heart"></i></a>
+    							<a title="Compare" href="#" class="prod-rel-compare"><i class="fa fa-bar-chart"></i></a>
+    							<p class="prod-i-addwrap">
+    								<a title="Add to cart" href="#" class="prod-i-add"><i class="fa fa-shopping-cart"></i></a>
+    							</p>
+    						</div>
+    					</div>
+    				</div>
+          @endforeach
+  			</li>
+      @empty
+        No Item Found!
+      @endforelse
 
-									</li>
-					</ul>
 	</div>
 </div>
 <!-- Related Products - end -->

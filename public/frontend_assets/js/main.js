@@ -5,6 +5,34 @@ function pad(n) {
 }
 
 $(document).ready(function () {
+  //get size from attribute
+  $('#size').change(function (){
+    var idsize = $(this).val();
+
+		$.ajax({
+			type:'get',
+			url:'/get/attribute/details',
+			data:{idsize:idsize},
+			success:function(resp){
+        var detailsArray=resp.split('#');
+
+        $('#price').html(detailsArray[0]);
+        if(detailsArray[1]==0){
+          $("#add_cart").html('Out of stock');
+          $('#add_cart').css("background-color", "red");
+          $("#add_cart").prop('disabled', true);
+        }
+        else{
+          $("#add_cart").html('Add to cart');
+          $('#add_cart').css("background-color", "");
+          $("#add_cart").prop('disabled', false);
+        }
+			},error:function(){
+				alert("Error");
+			}
+		});
+  });
+
 
     // Single Product Tabs
     $('.prod-tabs li').on('click', 'a', function () {
@@ -462,7 +490,7 @@ $(window).load(function () {
                 maxSlides: 5,
                 pager: false,
             });
-        });         
+        });
     }
 
     // Filter
@@ -477,7 +505,7 @@ $(window).load(function () {
             return false;
         });
     }
-    
+
     // Product Countdown
     if ($('.countdown').length > 0) {
         $('.countdown').each(function () {
@@ -788,7 +816,7 @@ $(window).load(function () {
                 }
             });
         });
-        
+
         return compares;
     };
 

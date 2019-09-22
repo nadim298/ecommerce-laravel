@@ -53,7 +53,7 @@ if (typeof jQuery === 'undefined') {
                 },
                 save: {
                     class: 'btn btn-sm btn-success',
-                    html: 'Save'
+                    html: 'Update',
                 },
                 restore: {
                     class: 'btn btn-sm btn-warning',
@@ -174,7 +174,7 @@ if (typeof jQuery === 'undefined') {
 
                         // Create save button.
                         if (settings.editButton && settings.saveButton) {
-                            saveButton = '<button type="button" class="tabledit-save-button ' + settings.buttons.save.class + '" style="display: none; float: none; margin: 5px;">' + settings.buttons.save.html + '</button>';
+                            saveButton = '<button type="submit" class="tabledit-save-button ' + settings.buttons.save.class + '" style="display: none; float: none; margin: 5px;">' + settings.buttons.save.html + '</button>';
                         }
 
                         // Create restore button.
@@ -575,7 +575,7 @@ if (typeof jQuery === 'undefined') {
 
         /**
          * Keyup event on table element.
-         * 
+         *
          * @param {object} event
          */
         $table.on('keyup', function(event) {

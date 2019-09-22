@@ -17,6 +17,7 @@ class CategoryController extends Controller
         $category->parent_id=$data['parent_id'];
         $category->description=$data['description'];
         $category->url=$data['url'];
+        $category->status=$data['status'];
         $category->save();
 
         return redirect('/admin/view/category')->with('success_message','New category added successfully!');
@@ -35,6 +36,7 @@ class CategoryController extends Controller
           'parent_id'=>$request->parent_id,
           'description'=>$request->description,
           'url'=>$request->url,
+          'status'=>$request->status,
         ]);
         return redirect('/admin/view/category')->with('success_message','Category updated successfully!');
       }

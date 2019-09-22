@@ -52,40 +52,46 @@
 
 		<ul class="fr-pop-tabs sections-show">
 			@foreach ($categories as $category)
-					<li><a data-frpoptab-num="{{$category->id}}" data-frpoptab="#frpoptab-tab-{{$category->id}}" href="#">{{$category->category_name}}</a></li>
+					<li><a data-frpoptab-num="{{$category->id}}" data-frpoptab="#frpoptab-tab-{{$category->id}}" href="#">{{$category->name}}</a></li>
 			@endforeach
 		</ul>
 
 		<div class="fr-pop-tab-cont">
-			@forelse ($products as $category_product)
+			@forelse ($categories as $category)
 
-			<div class="flexslider prod-items fr-pop-tab" id="frpoptab-tab-{{$category_product->category_id}}">
+			<div class="flexslider prod-items fr-pop-tab" id="frpoptab-tab-{{$category->id}}">
 
 	      <ul class="slides">
-					@foreach ($products as $product)
-						@if ($product->category_id==$category_product->category_id)
-							<li class="prod-i">
-		  							<div class="prod-i-top">
-		  								<a href="{{url('product/details')}}/{{$product->id}}" class="prod-i-img"><img src="{{asset('uploads/product_photos/')}}/{{$product->product_image}}" alt="Aspernatur excepturi rem"><!-- NO SPACE --></a>
-		  								<p class="prod-i-info">
-		  									<a href="#" class="prod-i-favorites"><span>Wishlist</span><i class="fa fa-heart"></i></a>
-		  									<a href="#" class="qview-btn prod-i-qview"><span>Quick View</span><i class="fa fa-search"></i></a>
-		  									<a class="prod-i-compare" href="#"><span>Compare</span><i class="fa fa-bar-chart"></i></a>
-		  								</p>
-		  								<p class="prod-i-addwrap">
-		  									<a href="{{url('product/details')}}/{{$product->id}}" class="prod-i-add">Go to detail</a>
-		  								</p>
-		  							</div>
-		  							<h3>
-		  								<a href="product.html">{{$product->product_name}}</a>
-		  							</h3>
-		  							<p class="prod-i-price">
-		  								<b>BDT {{$product->product_price}}</b>
-		  							</p>
-		  						</li>
-						@endif
+					@foreach ($category->relationtosubcategory as $subcategory)
+						@foreach ($products as $product)
+
+							@if ($product->category_id==$subcategory->id)
+								<li class="prod-i">
+			  							<div class="prod-i-top">
+			  								<a href="{{url('product/details')}}/{{$product->id}}" class="prod-i-img"><img src="{{asset('uploads/product_photos/')}}/{{$product->image}}" alt="Product Image"><!-- NO SPACE --></a>
+			  								<p class="prod-i-info">
+			  									<a href="#" class="prod-i-favorites"><span>Wishlist</span><i class="fa fa-heart"></i></a>
+			  									<a href="#" class="qview-btn prod-i-qview"><span>Quick View</span><i class="fa fa-search"></i></a>
+			  									<a class="prod-i-compare" href="#"><span>Compare</span><i class="fa fa-bar-chart"></i></a>
+			  								</p>
+			  								<p class="prod-i-addwrap">
+			  									<a href="{{url('product/details')}}/{{$product->id}}" class="prod-i-add">Go to detail</a>
+			  								</p>
+			  							</div>
+			  							<h3>
+			  								<a href="{{url('product/details')}}/{{$product->id}}">{{$product->product_name}}</a>
+			  							</h3>
+			  							<p class="prod-i-price">
+			  								<b>BDT {{$product->price}}</b>
+			  							</p>
+			  						</li>
+
+							@endif
+
+						@endforeach
 
 					@endforeach
+
 
 				</ul>
 			</div>

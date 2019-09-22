@@ -74,7 +74,7 @@
 	<div class="header-middle">
 		<div class="container header-middle-cont">
 			<div class="toplogo">
-				<a href="index-2.html">
+				<a href="{{url('/')}}">
 					<img src="{{asset('frontend_assets/img/logo.png')}}" alt="AllStore - MultiConcept eCommerce Template">
 				</a>
 			</div>
@@ -129,16 +129,31 @@
 
 	<!-- Catalog menu - start -->
 	<div class="topcatalog">
-		<a class="topcatalog-btn" href="{{url('/')}}"><span>All</span> catalog</a>
+		<a class="topcatalog-btn" href="{{url('category/wise/product')}}/{{'all'}}"><span>All</span> catalog</a>
 		<ul class="topcatalog-list">
 			@php
-				$menus=App\Category::all();
+			$categories = App\Category::with('relationtosubcategory')->where(['parent_id' => 0])->where('status','1')->get();
+
 			@endphp
-			@foreach ($menus as $menu)
+			@foreach ($categories as $main_category)
 				<li>
-					<a href="{{url('category/wise/product')}}/{{$menu->id}}">
-						{{$menu->category_name}}
+					<a href="{{url('category/wise/product')}}/{{$main_category->url}}">
+						{{$main_category->name}}
 					</a>
+					{{-- <i class="fa fa-angle-right"></i> --}}
+					<ul>
+
+					@foreach ($main_category->relationtosubcategory as $subcategory)
+
+
+							<li>
+								<a href="{{url('category/wise/product')}}/{{$subcategory->url}}">
+									{{$subcategory->name}}
+								</a>
+							</li>
+
+					@endforeach
+				</ul>
 				</li>
 			@endforeach
 

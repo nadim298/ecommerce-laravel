@@ -26,6 +26,7 @@
                                                 <th>Sub Category Of</th>
                                                 <th>Description</th>
                                                 <th>URL</th>
+                                                <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -36,11 +37,16 @@
                                                   <td>{{$category->name}}</td>
                                                   <td>
                                                     @if ($category->parent_id!=0)
-                                                      {{$category->relationtosubcategory->name}}
+                                                      {{$category->subcategorytomaincategory->name}}
                                                     @endif
                                                   </td>
                                                   <td>{{$category->description}}</td>
                                                   <td>{{$category->url}}</td>
+                                                  <td>@if ($category->status==1)
+                                                    <span style="color:green;">Enabled</span>
+                                                  @else
+                                                    <span style="color:red;">Disabled</span>
+                                                  @endif</td>
                                                   <td class="center">
                                                     <div class="button-list ">
                                                       <a href="{{url('admin/edit/category')}}/{{$category->id}}"><button type="button" class="btn btn-sm btn-success">Edit</button></a>

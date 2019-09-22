@@ -359,6 +359,10 @@
     <script src="{{asset('backend_assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js')}}"></script>
     <script src="{{asset('backend_assets/plugins/bootstrap-tagsinput/typeahead.bundle.js')}}"></script>
     <script src="{{asset('backend_assets/js/custom/custom-form-select.js')}}"></script>
+
+    <!-- Tabledit js -->
+    <script src="{{asset('backend_assets/plugins/tabledit/jquery.tabledit.js')}}"></script>     
+    <script src="{{asset('backend_assets/js/custom/custom-table-editable.js')}}"></script>    
     <!-- End js -->
 </body>
 

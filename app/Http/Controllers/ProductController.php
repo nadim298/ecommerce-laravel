@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Category;
+use App\ProductsAttribute;
+use App\ProductsImage;
 use Image;
 class ProductController extends Controller
 {
@@ -19,6 +21,7 @@ class ProductController extends Controller
       $product->description=$data['description'];
       $product->price=$data['price'];
       $product->image='defaultproductphoto.jpg';
+      $product->status=$data['status'];
       $product->save();
       $last_inserted_id=$product->id;
 
@@ -49,6 +52,7 @@ class ProductController extends Controller
         'product_color'=>$request->product_color,
         'description'=>$request->description,
         'price'=>$request->price,
+        'status'=>$request->status,
       ]);
       if($request->hasFile('image')){
         if(Product::find($request->id)->image =='defaultproductphoto.jpg'){
@@ -85,5 +89,83 @@ class ProductController extends Controller
       }
     Product::where('id',$product_id)->delete();
     return redirect('/admin/view/product')->with('success_message','Product deleted successfully!');
+  }
+  function add_product_attribute($product_id,Request $request){
+    if($request->isMethod('post')){
+      $data=$request->all();
+      foreach ($data['sku'] as $key => $value) {
+        if(!empty($value)){
+          $count_sku = ProductsAttribute::where(['sku'=>$value])->count();
+                    if($count_sku>0){
+                        return redirect('/admin/add/product/attribute/'.$product_id)->with('error_message', 'SKU already exists. Please add another SKU.');
+                    }
+                    $count_sizes = ProductsAttribute::where(['product_id'=>$product_id,'size'=>$data['size'][$key]])->count();
+                    if($count_sizes>0){
+                        return redirect('/admin/add/product/attribute/'.$product_id)->with('error_message', 'Attribute already exists. Please add another Attribute.');
+                    }
+          $attribute=new ProductsAttribute;
+          $attribute->product_id=$product_id;
+          $attribute->sku=$value;
+          $attribute->size=$data['size'][$key];
+          $attribute->price=$data['price'][$key];
+          $attribute->stock=$data['stock'][$key];
+          $attribute->save();
+        }
+      }
+      return redirect('/admin/add/product/attribute/'.$product_id)->with('success_message','Attributes added successfully!');
+    }
+    $product=Product::with('relationtoattributes')->find($product_id);
+    //$product=json_decode(json_encode($product));
+    //print_r($product);
+    return view('backend/add_product_attribute',compact('product'));
+  }
+  function delete_product_attribute($attribute_id){
+    ProductsAttribute::where('id',$attribute_id)->delete();
+    return redirect()->back()->with('success_message','Attribute deleted successfully!');
+  }
+
+  function add_product_image($product_id,Request $request){
+    if($request->isMethod('post')){
+      $data=$request->all();
+      foreach ($data['image'] as $key => $value) {
+        if(!empty($value)){
+            $photo_to_upload=$value;
+            $filename=$request->id."-".($data['name'][$key]).".".$photo_to_upload->getClientOriginalExtension();
+            $check_image = ProductsImage::where(['image'=>$filename])->count();
+                      if($check_image>0){
+                          return redirect('/admin/add/product/image/'.$product_id)->with('error_message', 'Image name already exists. Please add another name.');
+                      }
+
+            $save_img = Image::make($photo_to_upload)->resize(200, 200)->save(base_path('public/uploads/product_photos/'.$filename));
+
+              $products_image=new ProductsImage;
+              $products_image->product_id=$product_id;
+              $products_image->image=$filename;
+              $products_image->save();
+        }
+      }
+      return redirect('/admin/add/product/image/'.$product_id)->with('success_message','Image added successfully!');
+    }
+    $product=Product::with('relationtoattributes')->find($product_id);
+    //$product=json_decode(json_encode($product));
+    //print_r($product);
+    return view('backend/add_product_image',compact('product'));
+  }
+  function delete_product_image($image_id){
+    $delete_this_photo=ProductsImage::find($image_id)->image;
+    unlink(base_path('public/uploads/product_photos/'.$delete_this_photo));
+    ProductsImage::where('id',$image_id)->delete();
+    return redirect()->back()->with('success_message','Image deleted successfully!');
+  }
+  function edit_product_attribute($attribute_id, Request $request){
+    // $data=$request->all();
+    // $product=json_decode(json_encode($data));
+    // print_r($data);
+    ProductsAttribute::where('id',$request->id)->update([
+
+      'price'=>$request->price,
+      'stock'=>$request->stock,
+    ]);
+    return redirect()->back()->with('success_message','Attribute updated successfully!');
   }
 }
