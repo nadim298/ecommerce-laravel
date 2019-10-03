@@ -170,6 +170,16 @@
                                 <li><a href="{{url('admin/add/product')}}"><i class="mdi mdi-circle"></i>Add Product</a></li>
                                 <li><a href="{{url('admin/view/product')}}"><i class="mdi mdi-circle"></i>Manage Products</a></li>
                             </ul>
+
+                        </li>
+                        <li>
+                            <a href="javaScript:void();">
+                                <img src="{{asset('backend_assets/images/svg-icon/basic.svg')}}" class="img-fluid" alt="basic"><span>Coupon</span><i class="feather icon-chevron-right pull-right"></i>
+                            </a>
+                            <ul class="vertical-submenu">
+                                <li><a href="{{url('admin/add/coupon')}}"><i class="mdi mdi-circle"></i>Add Coupon</a></li>
+                                <li><a href="{{url('admin/view/coupon')}}"><i class="mdi mdi-circle"></i>Manage Coupons</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -361,9 +371,14 @@
     <script src="{{asset('backend_assets/js/custom/custom-form-select.js')}}"></script>
 
     <!-- Tabledit js -->
-    <script src="{{asset('backend_assets/plugins/tabledit/jquery.tabledit.js')}}"></script>     
-    <script src="{{asset('backend_assets/js/custom/custom-table-editable.js')}}"></script>    
+    <script src="{{asset('backend_assets/plugins/tabledit/jquery.tabledit.js')}}"></script>
+    <script src="{{asset('backend_assets/js/custom/custom-table-editable.js')}}"></script>
     <!-- End js -->
+
+    <!-- Datepicker JS -->
+    <script src="{{asset('backend_assets/plugins/datepicker/datepicker.min.js')}}"></script>
+    <script src="{{asset('backend_assets/plugins/datepicker/i18n/datepicker.en.js')}}"></script>
+    <script src="{{asset('backend_assets/js/custom/custom-form-datepicker.js')}}"></script>
 </body>
 
 <!-- Mirrored from xpanthersolutions.com/admin-templates/theta/html/dark-vertical/dashboard-ecommerce.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 06 Sep 2019 09:23:41 GMT -->

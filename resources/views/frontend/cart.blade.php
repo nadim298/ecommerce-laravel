@@ -15,7 +15,19 @@
   		<span>Cart</span>
   	</li>
   </ul>
-  <h1 class="main-ttl"><span>Cart</span></h1>
+  <h1 class="main-ttl main-ttl-categs"><span>Blog</span></h1>
+<!-- Blog Categories -->
+@if (session('success_message'))
+  <ul class="blog-categs">
+    <span class="alert alert-success">{{session('success_message')}}</span>
+  </ul>
+@endif
+@if (session('error_message'))
+  <ul class="blog-categs">
+    <span class="alert alert-danger">{{session('error_message')}}</span>
+  </ul>
+@endif
+
   <!-- Cart Items - start -->
   <form action="#">
 
@@ -36,27 +48,29 @@
             <tr>
     					<td class="cart-image">
     						<a href="product.html">
-    							<img src="{{asset('uploads/product_photos/')}}/{{$cart_item->relationtoproduct->product_image}}" alt="Similique delectus totam">
+    							<img src="{{asset('uploads/product_photos/')}}/{{$cart_item->relationtoproduct->image}}" alt="Similique delectus totam">
     						</a>
     					</td>
     					<td class="cart-ttl">
-    						<a href="product.html">{{$cart_item->relationtoproduct->product_name}}</a>
-    						<p>Color: Red</p>
-    						<p>Size: XS</p>
+    						<a href="product.html">{{$cart_item->product_name}}</a>
+    						<p>Color: {{$cart_item->product_color}}</p>
+    						<p>Size: {{$cart_item->size}}</p>
     					</td>
     					<td class="cart-price">
-    						<b>{{$cart_item->relationtoproduct->product_price}}</b>
+    						<b>{{$cart_item->price}}</b>
     					</td>
     					<td class="cart-quantity">
     						<p class="cart-qnt">
-    							<input value="{{$cart_item->product_quantity}}" type="text">
-    							<a href="#" class="cart-plus"><i class="fa fa-angle-up"></i></a>
-    							<a href="#" class="cart-minus"><i class="fa fa-angle-down"></i></a>
+    							<input value="{{$cart_item->quantity}}" type="text">
+    							<a href="{{url('cart/update/quantity')}}/{{$cart_item->id}}/{{1}}" class="cart-plus"><i class="fa fa-angle-up"></i></a>
+                  @if ($cart_item->quantity>1)
+                    <a href="{{url('cart/update/quantity')}}/{{$cart_item->id}}/{{-1}}" class="cart-minus"><i class="fa fa-angle-down"></i></a>
+
+                  @endif
     						</p>
     					</td>
     					<td class="cart-summ">
-    						<b>{{$cart_item->relationtoproduct->product_price*$cart_item->product_quantity}}</b>
-    						<p class="cart-forone">unit price <b>$220</b></p>
+    						<b>{{$cart_item->price*$cart_item->quantity}}</b>
     					</td>
     					<td class="cart-del">
     						<a href="{{url('delete/from/cart')}}/{{$cart_item->id}}" class="cart-remove"></a>
@@ -72,7 +86,7 @@
   		</table>
   	</div>
   	<ul class="cart-total">
-  		<li class="cart-summ">TOTAL: <b>$815</b></li>
+  		<li class="cart-summ">TOTAL: <b>BDT {{$total}}</b></li>
   	</ul>
   	<div class="cart-submit">
   		<div class="cart-coupon">

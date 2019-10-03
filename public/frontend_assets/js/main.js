@@ -17,6 +17,7 @@ $(document).ready(function () {
         var detailsArray=resp.split('#');
 
         $('#price').html(detailsArray[0]);
+        $('#product_price').val(detailsArray[0]);
         if(detailsArray[1]==0){
           $("#add_cart").html('Out of stock');
           $('#add_cart').css("background-color", "red");

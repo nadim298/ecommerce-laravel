@@ -10,6 +10,8 @@ use App\ProductsAttribute;
 use App\Contact;
 use Mail;
 use App\Mail\ContactMessage;
+use Auth;
+use Session;
 class FrontendController extends Controller
 {
     function index(){
@@ -33,7 +35,7 @@ class FrontendController extends Controller
     function categorywiseproduct($url){
       $products="";
       if ($url=='all') {
-        $products=Product::all();
+        $products=Product::where('status','1')->get();
         $category_details = (object)array("name"=>"All Category");
       }
       else{
@@ -50,11 +52,11 @@ class FrontendController extends Controller
           foreach ($category_details->relationtosubcategory as $subcategory) {
             $subcategory_ids[]=$subcategory->id;
           }
-          $products=Product::whereIn('category_id',$subcategory_ids)->get();
+          $products=Product::whereIn('category_id',$subcategory_ids)->where('status','1')->get();
         }
         else{
 
-          $products=Product::where('category_id',$category_details->id)->get();
+          $products=Product::where('category_id',$category_details->id)->where('status','1')->get();
         }
       }
 
@@ -62,32 +64,92 @@ class FrontendController extends Controller
       //   echo "<pre>"; print_r($productsAll); die;
       return view('frontend/categorywiseproduct',compact('products','category_details'));
     }
-    function addtocart($product_id){
-      $customer_ip= $_SERVER['REMOTE_ADDR'];
-      if(Cart::where('customer_ip', $customer_ip)->where('product_id', $product_id)->exists()){
-        Cart::where('customer_ip', $customer_ip)->where('product_id', $product_id)->increment('product_quantity');
-      }
-      else {
-        Cart::insert([
-          'customer_ip'=> $customer_ip,
-          'product_id'=> $product_id,
-          'created_at'=> Carbon::now(),
-        ]);
-      }
+    function addtocart(Request $request){
+      if($request->isMethod('post')){
 
-      return back();
+        $data=$request->all();
+        if(empty(Auth::user()->email)){
+            $data['user_email'] = '';
+        }else{
+            $data['user_email'] = Auth::user()->email;
+        }
+        $session_id = Session::get('session_id');
+        if(!isset($session_id)){
+            $session_id = str_random(40);
+            Session::put('session_id',$session_id);
+        }
+        $sizeIDArr = explode('-',$data['size']);
+        $product_size = $sizeIDArr[1];
+        $product_attribute_details=ProductsAttribute::select('sku','stock')->where(['product_id' => $data['product_id'], 'size' => $product_size])->first();
+        $item_count=Cart::where('session_id',$session_id)->where('product_id',$data['product_id'])->where('size',$product_size)->count();
+        if($product_attribute_details->stock>=$data['quantity']){
+          if($item_count==0){
+
+            $Cart=new Cart;
+            $Cart->product_id=$data['product_id'];
+            $Cart->product_name=$data['product_name'];
+            $Cart->product_code=$product_attribute_details['sku'];
+            $Cart->product_color=$data['product_color'];
+            $Cart->size=$product_size;
+            $Cart->price=$data['price'];
+            $Cart->quantity=$data['quantity'];
+            $Cart->user_email=$data['user_email'];
+            $Cart->session_id=$session_id;
+
+            $Cart->save();
+            return back()->with('success_message','Successfully added to the cart!');
+          }
+          else{
+            $cart_details = Cart::where('session_id',$session_id)->where('product_code',$product_attribute_details->sku)->first();
+             $updated_quantity = $cart_details->quantity+$data['quantity'];
+            if($product_attribute_details->stock>=$updated_quantity){
+            Cart::where('product_id',$data['product_id'])->where('session_id',$session_id)->update(['quantity'=>$updated_quantity]);
+          }
+          else{
+            return back()->with('error_message','No available stock!');
+          }
+        }
+
+
+      }
+        //echo "<pre>"; print_r($data); die;
+
+
     }
+  }
     function cart(){
-      $cart_items=Cart::where('customer_ip',$_SERVER['REMOTE_ADDR'])->get();
-      return view('frontend/cart', compact('cart_items'));
+      // $cart_items=Cart::where('customer_ip',$_SERVER['REMOTE_ADDR'])->get();
+      $session_id = Session::get('session_id');
+      $cart_items=Cart::where('session_id',$session_id)->get();
+      $total=0;
+      foreach ($cart_items as $cart_item) {
+        $per_item_total=$cart_item->price*$cart_item->quantity;
+        $total=$per_item_total+$total;
+      }
+      return view('frontend/cart', compact('cart_items','total'));
     }
     function deletefromcart($item_id){
       Cart::find($item_id)->delete();
       return back();
     }
     function clearcart(){
-      Cart::where('customer_ip',$_SERVER['REMOTE_ADDR'])->delete();
+      $session_id = Session::get('session_id');
+      Cart::where('session_id',$session_id)->delete();
       return back();
+    }
+    function cart_update_quantity($item_id,$quantity){
+      $getProductSKU = Cart::select('product_code','quantity')->where('id',$item_id)->first();
+       $getProductStock = ProductsAttribute::where('sku',$getProductSKU->product_code)->first();
+       $updated_quantity = $getProductSKU->quantity+$quantity;
+      $session_id = Session::get('session_id');
+      if($getProductStock->stock>=$updated_quantity){
+
+        Cart::where('id',$item_id)->where('session_id',$session_id)->increment('quantity',$quantity);
+        return back()->with('success_message','Successfully updated product quantity!');
+      }
+      else{
+        return back()->with('error_message','No available stock!');
+      }
     }
     function contactmessageinsert(Request $request){
       $name=$request->name;

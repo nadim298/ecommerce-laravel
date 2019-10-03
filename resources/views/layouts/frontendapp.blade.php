@@ -111,7 +111,10 @@
 							<a href="{{url('cart')}}">
 								<i class="fa fa-shopping-cart"></i>
 								<span class="shop-menu-ttl">Cart</span>
-								(<b>{{App\Cart::where('customer_ip', $_SERVER['REMOTE_ADDR'])->sum('product_quantity')}}</b>)
+								@php
+									$session_id = Session::get('session_id');
+								@endphp
+								(<b>{{App\Cart::where('session_id', $session_id)->sum('quantity')}}</b>)
 							</a>
 						</div>
 					</li>

@@ -23,7 +23,7 @@
                                 <h5 class="card-title">Add Product Attributes</h5>
                             </div>
                             <div class="card-body">
-                                <form class="" action="{{url('admin/add/attribute')}}/{{$product->id}}" method="post">
+                                <form class="" action="{{url('admin/add/product/attribute')}}/{{$product->id}}" method="post">
                                   @csrf
                                   <div class="">
                                       <div class="grid-example">

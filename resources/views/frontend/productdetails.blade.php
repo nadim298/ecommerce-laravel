@@ -12,7 +12,18 @@
   		<span>{{$singleProductInfo->product_name}}</span>
   	</li>
   </ul>
-<h1 class="main-ttl"><span>{{$singleProductInfo->product_name}}</span></h1>
+<h1 class="main-ttl main-ttl-categs"><span>{{$singleProductInfo->product_name}}</span></h1>
+
+@if (session('success_message'))
+  <ul class="blog-categs">
+    <span class="alert alert-success">{{session('success_message')}}</span>
+  </ul>
+@endif
+@if (session('error_message'))
+  <ul class="blog-categs">
+    <span class="alert alert-danger">{{session('error_message')}}</span>
+  </ul>
+@endif
 <!-- Single Product - start -->
 <div class="prod-wrap">
 
@@ -60,7 +71,14 @@
 	</div>
 
 	<!-- Product Description/Info -->
-	<div class="prod-cont">
+  <form action="{{url('add/to/cart')}}" method="post">
+    @csrf
+    <input type="hidden" name="product_id" value="{{ $singleProductInfo->id }}">
+		<input type="hidden" name="product_name" value="{{ $singleProductInfo->product_name }}">
+		<input type="hidden" name="product_code" value="{{ $singleProductInfo->product_code }}">
+		<input type="hidden" name="product_color" value="{{ $singleProductInfo->product_color }}">
+    <input type="hidden" name="price" id="product_price" value="{{ $singleProductInfo->price }}">
+	   <div class="prod-cont">
 		<div class="prod-cont-txt">
       {{$singleProductInfo->description}}
 			</div>
@@ -107,14 +125,14 @@
 				<b class="item_current_price" >BDT <span id="price">{{$singleProductInfo->price}}</span></b>
 			</p>
 			<p class="prod-qnt">
-				<input value="1" type="text">
+				<input value="1" name="quantity" type="text">
 				<a href="#" class="prod-plus"><i class="fa fa-angle-up"></i></a>
 				<a href="#" class="prod-minus"><i class="fa fa-angle-down"></i></a>
 			</p>
 
 			<p class="prod-addwrap">
 				@if ($totalstock>0)
-          <button class="prod-add" id="add_cart" href="{{url('add/to/cart')}}/{{$singleProductInfo->id}}"   rel="nofollow">Add to cart</button>
+          <button class="prod-add" id="add_cart" href=""   rel="nofollow">Add to cart</button>
         @else
           <button class="prod-add" id="add_cart" style="background-color:red;" disabled>Out of stock</button>
         @endif
@@ -131,7 +149,7 @@
 			<li><a href="#" class="prod-showprops">All Features</a></li>
 		</ul>
 	</div>
-
+  </form>
 	<!-- Product Tabs -->
 	<div class="prod-tabs-wrap">
 		<ul class="prod-tabs">

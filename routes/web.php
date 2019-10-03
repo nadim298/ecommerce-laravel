@@ -38,6 +38,8 @@ Route::group(['middleware'=>['auth']], function(){
   //image route
   Route::match(['get','post'],'/admin/add/product/image/{id}', 'ProductController@add_product_image');
   Route::get('/admin/delete/product/image/{id}', 'ProductController@delete_product_image');
+  //coupon routes
+  Route::match(['get','post'],'/admin/add/coupon', 'CouponController@add_coupon');
 });
 
 //frontend routes
@@ -45,10 +47,13 @@ Route::get('/', 'FrontendController@index');
 Route::get('about', 'FrontendController@about');
 Route::get('product/details/{product_id}', 'FrontendController@productdetails');
 Route::get('category/wise/product/{url}', 'FrontendController@categorywiseproduct');
-Route::get('add/to/cart/{product_id}', 'FrontendController@addtocart');
+//cart routes
+Route::match(['get','post'],'add/to/cart', 'FrontendController@addtocart');
 Route::get('/cart', 'FrontendController@cart');
 Route::get('/delete/from/cart/{item_id}', 'FrontendController@deletefromcart');
+Route::get('/cart/update/quantity/{item_id}/{quantity}', 'FrontendController@cart_update_quantity');
 Route::get('/clear/cart', 'FrontendController@clearcart');
+
 Route::get('/contact', 'FrontendController@contact');
 Route::post('/contact/message/insert', 'FrontendController@contactmessageinsert');
 //get price from attribute
