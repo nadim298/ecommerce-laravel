@@ -40,6 +40,9 @@ Route::group(['middleware'=>['auth']], function(){
   Route::get('/admin/delete/product/image/{id}', 'ProductController@delete_product_image');
   //coupon routes
   Route::match(['get','post'],'/admin/add/coupon', 'CouponController@add_coupon');
+  Route::get('/admin/view/coupon', 'CouponController@view_coupon');
+  Route::match(['get','post'],'/admin/edit/coupon/{id}', 'CouponController@edit_coupon');
+  Route::get('/admin/delete/coupon/{id}', 'CouponController@delete_coupon');//
 });
 
 //frontend routes
@@ -58,3 +61,8 @@ Route::get('/contact', 'FrontendController@contact');
 Route::post('/contact/message/insert', 'FrontendController@contactmessageinsert');
 //get price from attribute
 Route::get('/get/attribute/details', 'FrontendController@get_attribute_details');
+
+Route::post('/apply/coupon', 'FrontendController@apply_coupon');
+
+//user account routes
+Route::match(['get','post'],'/user/login/register', 'UserController@login_register');

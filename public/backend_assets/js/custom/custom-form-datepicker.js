@@ -8,7 +8,7 @@ $(document).ready(function() {
     /* --- Form - Datepicker -- */
     $('#default-date').datepicker({
 	    language: 'en',
-	    dateFormat: 'yyyy/dd/mm',
+	    dateFormat: 'yyyy-mm-dd',
 	});
     $('#autoclose-date').datepicker({
 	    language: 'en',

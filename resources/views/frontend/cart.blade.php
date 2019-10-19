@@ -29,7 +29,7 @@
 @endif
 
   <!-- Cart Items - start -->
-  <form action="#">
+  
 
   	<div class="cart-items-wrap">
   		<table class="cart-items">
@@ -81,22 +81,42 @@
               <td colspan="5" style="text-align: center; color:red;">No product has been added!</td>
             </tr>
           @endforelse
-
+          
   			</tbody>
   		</table>
   	</div>
-  	<ul class="cart-total">
-  		<li class="cart-summ">TOTAL: <b>BDT {{$total}}</b></li>
-  	</ul>
+  	
+      @if (!empty(Session::get('CouponAmount')))
+      <ul class="cart-total">
+        <li class="cart-summ">Sub TOTAL: <b>BDT {{$total}}</b></li>
+      </ul>
+      <ul class="cart-total">
+        <li class="cart-summ">Coupon Discount: <b>BDT {{Session::get('CouponAmount')}}</b></li>
+      </ul>
+      <ul class="cart-total">
+        <li class="cart-summ">TOTAL: <b>BDT {{$total-Session::get('CouponAmount')}}</b></li>
+      </ul>
+      @else
+      <ul class="cart-total">
+        <li class="cart-summ">TOTAL: <b>BDT {{$total}}</b></li>
+      </ul>
+      @endif
+  		
+  	
   	<div class="cart-submit">
   		<div class="cart-coupon">
-  			<input placeholder="your coupon" type="text">
-  			<a class="cart-coupon-btn" href="#"><img src="{{asset('frontend_assets/img/ok.png')}}" alt="your coupon"></a>
+        <form action="{{ url('apply/coupon') }}" method="post">
+          @csrf
+          
+          <input placeholder="your coupon" name="coupon_code" type="text">
+          <input type="submit" name="submit" value="Apply">
+        </form>
+  			
   		</div>
   		<a href="#" class="cart-submit-btn">Checkout</a>
   		<a href="{{url('clear/cart')}}" class="cart-clear">Clear cart</a>
   	</div>
-  </form>
+  
   <!-- Cart Items - end -->
 
   </section>

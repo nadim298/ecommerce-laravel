@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 03, 2019 at 06:27 PM
--- Server version: 10.3.16-MariaDB
--- PHP Version: 7.3.6
+-- Host: localhost:3306
+-- Generation Time: Oct 19, 2019 at 04:04 PM
+-- Server version: 5.7.24
+-- PHP Version: 7.2.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `laravelpractise`
+-- Database: `ecommerce1`
 --
 
 -- --------------------------------------------------------
@@ -57,7 +57,10 @@ INSERT INTO `carts` (`id`, `product_id`, `product_name`, `product_code`, `produc
 (16, 10, 'Black Shirt', 'BS001-L', 'Black', 'Large', 1100.00, 2, '', 'Gx3H5Mwr0483h623d9xzJQDRi1DFQRgxb4WvdQ7W', '2019-09-29 15:33:51', '2019-09-29 16:43:20'),
 (17, 7, 'Full sleeve shirt', 'FSS002-M', 'Red', 'Medium', 800.00, 1, '', 'Gx3H5Mwr0483h623d9xzJQDRi1DFQRgxb4WvdQ7W', '2019-09-29 16:19:48', '2019-09-29 16:41:18'),
 (18, 10, 'Black Shirt', 'BS001-L', 'Black', 'Large', 1100.00, 2, '', 'zV00MIb49h4IFE7WDZ2vlc8mo97GHq9ICsZhlWmo', '2019-09-30 14:51:24', '2019-09-30 14:51:24'),
-(19, 7, 'Full sleeve shirt', 'FSS002-S', 'Red', 'Small', 700.00, 2, '', 'zV00MIb49h4IFE7WDZ2vlc8mo97GHq9ICsZhlWmo', '2019-09-30 14:51:36', '2019-09-30 15:02:57');
+(19, 7, 'Full sleeve shirt', 'FSS002-S', 'Red', 'Small', 700.00, 2, '', 'zV00MIb49h4IFE7WDZ2vlc8mo97GHq9ICsZhlWmo', '2019-09-30 14:51:36', '2019-09-30 15:02:57'),
+(20, 7, 'Full sleeve shirt', 'FSS002-S', 'Red', 'Small', 700.00, 1, '', 'iCsA8c1L6Dx4govicAgy8QyZjqIhUcoqtcYTk7zD', '2019-10-04 10:07:47', '2019-10-04 10:07:54'),
+(21, 7, 'Full sleeve shirt', 'FSS002-S', 'Red', 'Small', 700.00, 1, '404nadim@gmail.com', 'O97QSEHX4aQ9MeouZNb4o1NKGNapQg9MV1YOKmn8', '2019-10-08 15:20:25', '2019-10-08 15:20:25'),
+(22, 7, 'Full sleeve shirt', 'FSS002-S', 'Red', 'Small', 700.00, 2, '', 'nYDuAUlQLGQRu16Orf0U3Gb7i6arp0GqsxJN0IKj', '2019-10-08 15:23:51', '2019-10-08 15:41:35');
 
 -- --------------------------------------------------------
 
@@ -67,11 +70,11 @@ INSERT INTO `carts` (`id`, `product_id`, `product_name`, `product_code`, `produc
 
 CREATE TABLE `categories` (
   `id` int(10) UNSIGNED NOT NULL,
-  `parent_id` int(11) DEFAULT 0,
+  `parent_id` int(11) DEFAULT '0',
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
   `url` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `status` tinyint(4) NOT NULL DEFAULT '1',
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -101,7 +104,7 @@ CREATE TABLE `contacts` (
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `message` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `read_status` int(11) NOT NULL DEFAULT 1,
+  `read_status` int(11) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -137,7 +140,8 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`id`, `coupon_code`, `amount`, `amount_type`, `expiry_date`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'code1', 1, 'Percentage', '2019-01-10', 1, '2019-09-30 22:53:32', '2019-09-30 16:53:32');
+(1, 'code1', 10, 'Percentage', '2019-10-12', 1, '2019-09-30 22:53:32', '2019-10-08 14:17:40'),
+(3, 'off150', 150, 'Fixed', '2019-10-10', 1, '2019-10-08 19:51:10', '2019-10-08 15:20:42');
 
 -- --------------------------------------------------------
 
@@ -200,7 +204,7 @@ CREATE TABLE `products` (
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `price` double(8,2) NOT NULL,
   `image` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -260,7 +264,7 @@ CREATE TABLE `products_images` (
   `product_id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -372,7 +376,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -390,7 +394,7 @@ ALTER TABLE `contacts`
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `migrations`

@@ -97,11 +97,11 @@
 					</li>
 
 					<li class="topauth">
-						<a href="{{ route('register') }}">
+						<a href="{{url('user/login/register')}}">
 							<i class="fa fa-lock"></i>
 							<span class="shop-menu-ttl">Registration</span>
 						</a>
-						<a href="{{url('home')}}">
+						<a href="{{url('user/login/register')}}">
 							<span class="shop-menu-ttl">Login</span>
 						</a>
 					</li>
