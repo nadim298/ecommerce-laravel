@@ -38,7 +38,7 @@
     <div class="auth-col">
         <h2>Register</h2>
 
-        <form method="post" class="register" action="{{url('user/login/register')}}">
+        <form method="post" class="register" action="{{url('user/register')}}">
           @csrf
           <p>
               <label for="reg_email">Name <span class="required">*</span></label><input type="text" id="name" name="name" required>

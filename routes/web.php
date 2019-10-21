@@ -65,4 +65,6 @@ Route::get('/get/attribute/details', 'FrontendController@get_attribute_details')
 Route::post('/apply/coupon', 'FrontendController@apply_coupon');
 
 //user account routes
-Route::match(['get','post'],'/user/login/register', 'UserController@login_register');
+Route::get('/user/login/register', 'UserController@user_login_register');
+Route::post('/user/register', 'UserController@user_register');
+Route::get('/user/logout', 'UserController@user_logout');

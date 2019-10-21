@@ -97,13 +97,24 @@
 					</li>
 
 					<li class="topauth">
-						<a href="{{url('user/login/register')}}">
-							<i class="fa fa-lock"></i>
-							<span class="shop-menu-ttl">Registration</span>
-						</a>
-						<a href="{{url('user/login/register')}}">
-							<span class="shop-menu-ttl">Login</span>
-						</a>
+						@if (empty(Auth::check()))
+							<a href="{{url('user/login/register')}}">
+								<i class="fa fa-lock"></i>
+								<span class="shop-menu-ttl">Registration</span>
+							</a>
+							<a href="{{url('user/login/register')}}">
+								<span class="shop-menu-ttl">Login</span>
+							</a>
+						@else
+							<a href="{{url('user/login/register')}}">
+								<i class="fa fa-lock"></i>
+								<span class="shop-menu-ttl">Account</span>
+							</a>
+							<a href="{{url('user/logout')}}">
+								<span class="shop-menu-ttl">Logout</span>
+							</a>
+						@endif
+
 					</li>
 
 					<li>
